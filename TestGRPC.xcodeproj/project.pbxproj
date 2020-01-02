@@ -24,6 +24,7 @@
 		C18F20ED23BD071700ECDDC3 /* NIOWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = C18F20EC23BD071700ECDDC3 /* NIOWebSocket */; };
 		C18F20EF23BD071700ECDDC3 /* NIO in Frameworks */ = {isa = PBXBuildFile; productRef = C18F20EE23BD071700ECDDC3 /* NIO */; };
 		C19F710023AF0CD9004EF0EB /* ClientGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19F70FF23AF0CD9004EF0EB /* ClientGuide.swift */; };
+		C1BF688C23BE898D0018B013 /* KeyboardObserving in Frameworks */ = {isa = PBXBuildFile; productRef = C1BF688B23BE898D0018B013 /* KeyboardObserving */; };
 		C1C2748123BE285C0018170E /* chat_proto.grpc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C2747F23BE285C0018170E /* chat_proto.grpc.swift */; };
 		C1C2748223BE285C0018170E /* chat_proto.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C2748023BE285C0018170E /* chat_proto.pb.swift */; };
 		C1F719AD23B26AA10040E83E /* RoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F719AC23B26AA10040E83E /* RoomModel.swift */; };
@@ -93,6 +94,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C18F20EF23BD071700ECDDC3 /* NIO in Frameworks */,
+				C1BF688C23BE898D0018B013 /* KeyboardObserving in Frameworks */,
 				FC79B82E7CB9D45123BAE4BD /* Pods_TestGRPC.framework in Frameworks */,
 				C18F20ED23BD071700ECDDC3 /* NIOWebSocket in Frameworks */,
 			);
@@ -322,6 +324,7 @@
 			packageProductDependencies = (
 				C18F20EC23BD071700ECDDC3 /* NIOWebSocket */,
 				C18F20EE23BD071700ECDDC3 /* NIO */,
+				C1BF688B23BE898D0018B013 /* KeyboardObserving */,
 			);
 			productName = TestGRPC;
 			productReference = C18C963323A669D600E7C95A /* TestGRPC.app */;
@@ -400,6 +403,7 @@
 			mainGroup = C18C962A23A669D600E7C95A;
 			packageReferences = (
 				C18F20EB23BD071700ECDDC3 /* XCRemoteSwiftPackageReference "swift-nio" */,
+				C1BF688A23BE898D0018B013 /* XCRemoteSwiftPackageReference "KeyboardObserving" */,
 			);
 			productRefGroup = C18C963423A669D600E7C95A /* Products */;
 			projectDirPath = "";
@@ -901,6 +905,14 @@
 				minimumVersion = 2.12.0;
 			};
 		};
+		C1BF688A23BE898D0018B013 /* XCRemoteSwiftPackageReference "KeyboardObserving" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nickffox/KeyboardObserving.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -913,6 +925,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C18F20EB23BD071700ECDDC3 /* XCRemoteSwiftPackageReference "swift-nio" */;
 			productName = NIO;
+		};
+		C1BF688B23BE898D0018B013 /* KeyboardObserving */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1BF688A23BE898D0018B013 /* XCRemoteSwiftPackageReference "KeyboardObserving" */;
+			productName = KeyboardObserving;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

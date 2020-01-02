@@ -19,8 +19,10 @@ final class RoomScreenViewModel: ObservableObject {
   enum Action {
     case createOrJoinRoom
     case connectToRoom
+    case outOfTheRoom
     case sendMessage
     case goAway
+    case nothing
   }
   
   enum RoomStatus {
@@ -37,6 +39,7 @@ final class RoomScreenViewModel: ObservableObject {
   let fetchStatus: PassthroughSubject<RoomStatus, Never> = PassthroughSubject<RoomStatus, Never>()
   @Published var room: Room?
   @Published var statusText: String = ""
+  @Published var statusAction: Action = .nothing
   
   init() {
     roomClientGuide = RoomClientGuide()
@@ -44,16 +47,22 @@ final class RoomScreenViewModel: ObservableObject {
     inputMessage = ""
     fetchAction.sink { [weak self] (v) in
       guard let self = self else { return }
+      self.statusAction = v
       switch v {
       case .createOrJoinRoom:
         self.doCreateRoom()
       case .sendMessage:
         self.roomClientGuide.sendMessage(roomID: self.roomID,
                                          inputMessage: self.inputMessage)
+        self.inputMessage = ""
       case .connectToRoom:
         self.createStream()
+      case .outOfTheRoom:
+        UserSession.shared.user?.roomId = nil
       case .goAway:
         UserSession.shared.user = nil
+      case .nothing:
+        break
       }
     }.store(in: &cancellableSet)
   }
@@ -84,7 +93,7 @@ final class RoomScreenViewModel: ObservableObject {
   private func createStream() {
     _ = try? roomClientGuide.createStreamConnection(roomID: self.roomID) { (message) in
       DispatchQueue.main.async {
-        UserSession.shared.messages?.append(message)
+        UserSession.shared.messages?.insert(message, at: 0)
       }
     }
   }

@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "KeyboardObserving",
+        "repositoryURL": "https://github.com/nickffox/KeyboardObserving.git",
+        "state": {
+          "branch": "master",
+          "revision": "d3d67a4d07b411eac3055fdba71d71060181a605",
+          "version": null
+        }
+      },
+      {
         "package": "swift-nio",
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {

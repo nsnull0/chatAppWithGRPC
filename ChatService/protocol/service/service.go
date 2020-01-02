@@ -45,6 +45,7 @@ var CollectionMessages *mongo.Collection
 type Connection struct {
 	stream chatservice.ChatService_CreateStreamServer
 	id     string
+	roomID string
 	active bool
 	error  chan error
 }
@@ -212,9 +213,19 @@ func (s *Server) CreateStream(connect *chatservice.StreamConnect, stream chatser
 	conn := &Connection{
 		stream: stream,
 		id:     connect.GetSenderalias(),
+		roomID: connect.GetRoomId(),
 		active: true,
 		error:  make(chan error),
 	}
+
+	n := 0
+	for _, x := range s.Connnection {
+		if x.id != connect.GetSenderalias() {
+			s.Connnection[n] = x
+			n++
+		}
+	}
+	s.Connnection = s.Connnection[:n]
 
 	s.Connnection = append(s.Connnection, conn)
 
@@ -257,12 +268,14 @@ func (s *Server) SendMessage(ctx context.Context, req *chatservice.ContentMessag
 		go func(messageContent *chatservice.ContentMessage, conn *Connection) {
 			defer syncWait.Done()
 			if conn.active {
-				err := conn.stream.Send(messageContent)
-				fmt.Printf("Send Message to: %v\n", conn.stream)
-				if err != nil {
-					fmt.Printf("Error while streaming: %v\n", err)
-					conn.active = false
-					conn.error <- err
+				if req.RoomId == conn.roomID {
+					err := conn.stream.Send(messageContent)
+					fmt.Printf("Send Message to: %v\n", conn.stream)
+					if err != nil {
+						fmt.Printf("Error while streaming: %v\n", err)
+						conn.active = false
+						conn.error <- err
+					}
 				}
 			}
 		}(req, conn)

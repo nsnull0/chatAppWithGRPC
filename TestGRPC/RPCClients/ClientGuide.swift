@@ -53,7 +53,7 @@ final class RoomClientGuide {
         let room = Room(roomID: roomID,
                         messages: payload
                           .messages
-                          .compactMap{ Message(id: "\(Date().timeIntervalSince1970)-\($0.aliasname)", senderName: $0.aliasname, content: $0.message)})
+                          .compactMap{ Message(id: "\(Date().timeIntervalSince1970)-\($0.aliasname)", senderName: $0.aliasname, content: $0.message)}.reversed())
         completion(room)
       } else {
         errorHandler?(result.statusCode, result.statusMessage)

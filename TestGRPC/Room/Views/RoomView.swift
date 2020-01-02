@@ -8,10 +8,12 @@
 
 import SwiftUI
 import Combine
+import KeyboardObserving
 
 struct RoomView: View {
   @ObservedObject var viewModel: RoomScreenViewModel
   @State var textJoinColor: Color = Color(.systemGreen)
+  @State var textRoomIDColor: Color = Color(.secondaryLabel)
   init() {
     viewModel = RoomScreenViewModel()
   }
@@ -23,7 +25,8 @@ struct RoomView: View {
         }, label: {
           Text("Go Away").foregroundColor(textJoinColor)
         })
-          .padding([.top, .bottom, .leading], 8)
+          .padding(8)
+          .border(textJoinColor, width: 1)
       }
       HStack {
         VStack {
@@ -36,28 +39,36 @@ struct RoomView: View {
               .font(Font.system(size: 14))
               .multilineTextAlignment(.center)
               .padding(.bottom, 8)
-          }.padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)).border(Color(.systemGreen), width: 1)
+              .disabled(UserSession.shared.hasRoom)
+              .foregroundColor(textRoomIDColor)
+          }.padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16)).border(textJoinColor, width: 1)
           VStack {
             if UserSession.shared.hasRoom {
               Button(action: {
-                UserSession.shared.user?.roomId = nil
+                self.viewModel.fetchAction.send(.outOfTheRoom)
                 self.textJoinColor = Color(.systemGreen)
+                self.textRoomIDColor = Color(.secondaryLabel)
               }) {
                 HStack {
                     Text("Out the room").foregroundColor(textJoinColor).padding()
                     .foregroundColor(.white)
                     .cornerRadius(40)
+                    .border(textJoinColor)
                   }.frame(minWidth: 0, maxWidth: .infinity)
               }
             } else {
               Button(action: {
-                self.viewModel.fetchAction.send(.createOrJoinRoom)
+                if self.viewModel.roomID.count > 0 {
+                  self.viewModel.fetchAction.send(.createOrJoinRoom)
                   self.textJoinColor = Color(.systemRed)
+                  self.textRoomIDColor = Color(.systemGreen)
+                }
                 }) {
                   HStack {
                     Text("Join Room").foregroundColor(textJoinColor).padding()
                     .foregroundColor(.white)
                     .cornerRadius(40)
+                    .border(textJoinColor)
                   }.frame(minWidth: 0, maxWidth: .infinity)
               }
             }
@@ -66,6 +77,7 @@ struct RoomView: View {
       }
       Spacer(minLength: 8)
       if UserSession.shared.hasRoom {
+        Divider().background(textJoinColor)
         MessageListView(messageCollection: UserSession.shared.messages ?? [])
         Spacer(minLength: 8)
         HStack {
@@ -74,12 +86,13 @@ struct RoomView: View {
           Button(action: {
             self.viewModel.fetchAction.send(.sendMessage)
           }) {
-            Text("Send")
+            Text("Send").foregroundColor(Color(.systemYellow))
           }
         }
       }
       Spacer(minLength: 8)
     }.padding([.trailing, .leading], 8)
+    .keyboardObserving(offset: 8)
   }
 }
 
