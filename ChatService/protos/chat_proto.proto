@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package chatservice;
+
+message User {
+    string aliasname = 1;
+    string roomId = 2;
+    bool hasRoom = 3;
+}
+
+message UserMessage {
+    string aliasname = 1;
+    string message = 2;
+}
+
+message Room {
+    string roomId = 1;
+    repeated UserMessage messages = 2;
+}
+
+message ContentMessage {
+    string roomId = 1;
+    string content = 2;
+    string senderId = 3;
+}
+
+message LoginRequest {
+    User request = 1;
+}
+
+message LoginResponse {
+    User result = 1;
+}
+
+message RoomRequest {
+    string roomId = 1;
+    string aliasName = 2;
+}
+
+message RoomResponse {
+    Room response = 1;
+}
+
+message SendMessageRequest {
+    string roomId = 1;
+    string senderalias = 2;
+    string message = 3;
+}
+
+message StreamConnect {
+    string senderalias = 1;
+    string roomId = 2;
+    bool active = 3;
+}
+
+message Empty{}
+
+service ChatService {
+    rpc RegisterOrLoginUser(LoginRequest) returns (LoginResponse);
+    rpc RegisterOrJoinRoom(RoomRequest) returns (RoomResponse);
+    rpc CreateStream(StreamConnect) returns (stream ContentMessage);
+    rpc SendMessage(ContentMessage) returns (Empty);
+}

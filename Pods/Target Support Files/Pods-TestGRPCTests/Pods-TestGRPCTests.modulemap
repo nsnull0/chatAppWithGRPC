@@ -1,0 +1,6 @@
+framework module Pods_TestGRPCTests {
+  umbrella header "Pods-TestGRPCTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
