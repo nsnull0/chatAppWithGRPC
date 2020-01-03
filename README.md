@@ -23,6 +23,7 @@ or run the script
 ```
 ./generate.sh
 ```
+you may need to change IP Address on client app to your localhost.
 
 ## Reference
 - https://grpc.io/
